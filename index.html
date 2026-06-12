@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Yijia Ma | Bayesian Function Registration</title>
+
+  <style>
+    :root {
+      --text: #222;
+      --muted: #666;
+      --light: #f7f8fa;
+      --border: #e5e7eb;
+      --accent: #5b3f8c;
+      --accent-dark: #3d2a63;
+      --max-width: 980px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: #ffffff;
+      line-height: 1.65;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 36px 22px 60px;
+    }
+
+    header {
+      text-align: center;
+      padding: 38px 0 24px;
+    }
+
+    h1 {
+      font-size: 2.35rem;
+      line-height: 1.18;
+      margin: 0 0 14px;
+      font-weight: 750;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .authors {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    .my-name {
+      font-weight: 800;
+      color: var(--accent-dark);
+    }
+
+    .publication {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 18px;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 22px 0 10px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      border: 1px solid var(--accent);
+      transition: 0.18s ease;
+    }
+
+    .button:hover {
+      background: var(--accent-dark);
+      text-decoration: none;
+    }
+
+    .button.secondary {
+      background: white;
+      color: var(--accent);
+    }
+
+    .button.secondary:hover {
+      background: var(--light);
+    }
+
+    .hero-box {
+      background: linear-gradient(180deg, #f8f5ff, #ffffff);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 26px;
+      text-align: left;
+    }
+
+    .hero-box strong {
+      color: var(--accent-dark);
+    }
+
+    section {
+      margin-top: 46px;
+    }
+
+    h2 {
+      font-size: 1.55rem;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      margin-top: 24px;
+      font-size: 1.15rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.035);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.05rem;
+    }
+
+    .card p {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .highlight-box {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin-top: 18px;
+    }
+
+    .role-list {
+      margin-top: 14px;
+      padding-left: 20px;
+    }
+
+    .role-list li {
+      margin-bottom: 8px;
+    }
+
+    .teaser {
+      margin: 28px auto 10px;
+      text-align: center;
+    }
+
+    .teaser img {
+      max-width: 100%;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .caption {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    pre {
+      background: #111827;
+      color: #f9fafb;
+      padding: 18px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    code {
+      font-family: Consolas, Monaco, "Courier New", monospace;
+    }
+
+    footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    @media (max-width: 760px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .grid,
+      .grid.two {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 24px 16px 50px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <h1>A New Framework for Bayesian Function Registration</h1>
+
+      <div class="subtitle">
+        Bayesian modeling, stochastic-process priors, MCMC inference, and functional data alignment
+      </div>
+
+      <div class="authors">
+        <span class="my-name">Yijia Ma</span>,
+        Wei Wu
+      </div>
+
+      <div class="publication">
+        Electronic Journal of Statistics, 19, 2171–2198, 2025
+      </div>
+
+      <div class="button-row">
+        <a class="button" href="#" target="_blank">Paper</a>
+        <a class="button secondary" href="https://github.com/YMa2019/multi-align" target="_blank">Code</a>
+        <a class="button secondary" href="#my-role">My Role</a>
+        <a class="button secondary" href="#citation">Citation</a>
+      </div>
+
+      <div class="hero-box">
+        <p>
+          This project highlights my role as a <strong>Bayesian statistician and functional data scientist</strong>.
+          I developed a new Bayesian framework for function registration by placing stochastic-process priors
+          directly on a linear representation of time-warping functions. The framework avoids nonlinear
+          approximation in the warping computation, supports Gaussian and non-Gaussian priors, and uses
+          MCMC-based posterior inference to quantify uncertainty in function alignment.
+        </p>
+      </div>
+    </header>
+
+    <div class="teaser">
+      <!-- Replace this image with a figure exported from the paper, such as Fig. 1, Fig. 3, or Fig. 6 -->
+      <img src="assets/bayesian_registration_teaser.png" alt="Bayesian function registration framework" />
+      <div class="caption">
+        A Bayesian framework for function registration using CLR-based linear representation,
+        stochastic-process priors, and posterior sampling of time-warping functions.
+      </div>
+    </div>
+
+    <section id="my-role">
+      <h2>My Role: Bayesian Statistician and First Author</h2>
+
+      <p>
+        As the first author, I led the development of the statistical framework, theoretical formulation,
+        simulation studies, MCMC implementation, prior-sensitivity analysis, and real-data demonstration.
+        This work reflects my expertise in Bayesian inference, functional data analysis, stochastic processes,
+        uncertainty quantification, and statistical computing.
+      </p>
+
+      <div class="grid two">
+        <div class="card">
+          <h3>Bayesian Methodology</h3>
+          <p>
+            Developed a Bayesian registration framework that uses stochastic-process priors on
+            CLR-transformed time-warping functions.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Computational Statistics</h3>
+          <p>
+            Implemented posterior sampling using MCMC methods, including pCN-style algorithms
+            for efficient sampling of functional parameters.
+          </p>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <h3>Key technical contributions</h3>
+        <ul class="role-list">
+          <li>
+            Proposed a new Bayesian framework for function registration and phase variability modeling.
+          </li>
+          <li>
+            Built prior models directly on a CLR-based linear representation of time-warping functions.
+          </li>
+          <li>
+            Avoided nonlinear tangent-space approximation used in previous SRVF-based Bayesian approaches.
+          </li>
+          <li>
+            Developed Gaussian-process prior models for time-warping functions.
+          </li>
+          <li>
+            Extended the framework to non-Gaussian stochastic-process priors.
+          </li>
+          <li>
+            Implemented MCMC posterior inference for sampling warping functions.
+          </li>
+          <li>
+            Studied the effects of prior hyperparameters, including likelihood scale, covariance operator,
+            and prior mean.
+          </li>
+          <li>
+            Developed simulation studies comparing alignment behavior under different prior choices.
+          </li>
+          <li>
+            Extended the method from pairwise registration to multiple-function registration.
+          </li>
+          <li>
+            Demonstrated the method on real functional data and released reproducible code.
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="overview">
+      <h2>Problem Overview</h2>
+
+      <p>
+        Function registration, also called alignment, is a central problem in functional data analysis.
+        It aims to separate amplitude variability from phase variability. Phase variability is represented
+        through time-warping functions, which describe differences in timing or temporal progression
+        across observed curves.
+      </p>
+
+      <p>
+        Classical methods often estimate a single optimal warping function. Bayesian registration
+        instead treats warping as an unknown random function, allowing prior knowledge and posterior
+        uncertainty to be incorporated into the alignment process.
+      </p>
+    </section>
+
+    <section id="method">
+      <h2>Methodological Framework</h2>
+
+      <div class="grid">
+        <div class="card">
+          <h3>1. Functional Data</h3>
+          <p>
+            Observed functions contain both amplitude variation and phase variation.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>2. Time Warping</h3>
+          <p>
+            Phase variability is represented by strictly increasing time-warping functions.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>3. CLR Representation</h3>
+          <p>
+            Warping functions are transformed into a linear L²-based representation using
+            a centered log-ratio mapping.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>4. Bayesian Prior</h3>
+          <p>
+            Gaussian or non-Gaussian stochastic-process priors are placed on the transformed
+            warping functions.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>5. Likelihood</h3>
+          <p>
+            The likelihood is based on the alignment discrepancy between SRVF-transformed functions.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>6. Posterior Sampling</h3>
+          <p>
+            MCMC algorithms generate posterior samples of warping functions, enabling uncertainty
+            quantification.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="bayesian-model">
+      <h2>Bayesian Model Highlight</h2>
+
+      <div class="highlight-box">
+        <p>
+          The key methodological idea is to place the prior on the transformed warping function
+          rather than on the original nonlinear warping space. This makes it possible to use standard
+          stochastic-process models while preserving a valid one-to-one mapping back to proper
+          time-warping functions.
+        </p>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Gaussian Priors</h3>
+          <p>
+            The framework supports Gaussian-process priors with flexible mean and covariance structures.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Non-Gaussian Priors</h3>
+          <p>
+            The model can incorporate non-Gaussian coefficient distributions to represent multimodal
+            or constrained prior information.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Uncertainty Quantification</h3>
+          <p>
+            Posterior samples provide a distribution over possible alignments, not just a single
+            optimal warping.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="applications">
+      <h2>Applications in the Paper</h2>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Pairwise Registration</h3>
+          <p>
+            The method aligns two functions while quantifying posterior uncertainty in the warping.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Multiple Registration</h3>
+          <p>
+            The framework extends to multiple functions and provides an efficient center-of-orbit step.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Prior Sensitivity</h3>
+          <p>
+            The paper studies how likelihood scale, covariance, and prior mean influence alignment results.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Multimodal Alignment</h3>
+          <p>
+            Posterior sampling can reveal multiple plausible alignment modes.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Simulation Studies</h3>
+          <p>
+            Multiple simulations demonstrate the flexibility and advantages of the proposed Bayesian framework.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Real Data Analysis</h3>
+          <p>
+            The method is applied to real functional data to demonstrate practical alignment performance.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <h2>Key Results</h2>
+
+      <div class="highlight-box">
+        <p>
+          The proposed framework improves Bayesian function registration by replacing nonlinear
+          approximation-based priors with a direct linear representation of time-warping functions.
+          This enables valid prior sampling, flexible stochastic-process modeling, posterior uncertainty
+          quantification, and more efficient alignment computation.
+        </p>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Valid Warping Samples</h3>
+          <p>
+            The CLR-based representation maps posterior samples back to proper time-warping functions.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Flexible Priors</h3>
+          <p>
+            Gaussian and non-Gaussian priors can be used to encode different prior beliefs and constraints.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Efficient MCMC</h3>
+          <p>
+            pCN-style MCMC algorithms are used to sample functional warping parameters.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Prior Interpretation</h3>
+          <p>
+            The method clarifies how prior scale, covariance, and mean affect registration results.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Multiple Alignment</h3>
+          <p>
+            The framework extends naturally to multiple-function registration.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Reproducible Code</h3>
+          <p>
+            Programming scripts are available in the public repository accompanying the paper.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <h2>Skills Demonstrated</h2>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Bayesian Statistics</h3>
+          <p>
+            Prior modeling, posterior inference, MCMC sampling, and uncertainty quantification.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Functional Data Analysis</h3>
+          <p>
+            Function registration, phase variability, time warping, and multiple-function alignment.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Stochastic Processes</h3>
+          <p>
+            Gaussian-process priors, non-Gaussian priors, covariance design, and KL-style expansions.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Computational Statistics</h3>
+          <p>
+            Metropolis-Hastings algorithms, pCN sampling, simulation studies, and numerical implementation.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Statistical Theory</h3>
+          <p>
+            Isometric mappings, Hilbert-space representation, identifiability, and consistency arguments.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Applied Modeling</h3>
+          <p>
+            Real-data alignment, model validation, prior sensitivity, visualization, and reproducible workflows.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="code">
+      <h2>Code Availability</h2>
+
+      <p>
+        Programming scripts for the paper are available at:
+      </p>
+
+      <p>
+        <a href="https://github.com/YMa2019/multi-align" target="_blank">
+          https://github.com/YMa2019/multi-align
+        </a>
+      </p>
+    </section>
+
+    <section id="citation">
+      <h2>Citation</h2>
+
+      <pre><code>@article{ma2025bayesian,
+  title   = {A new framework for Bayesian function registration},
+  author  = {Ma, Yijia and Wu, Wei},
+  journal = {Electronic Journal of Statistics},
+  volume  = {19},
+  pages   = {2171--2198},
+  year    = {2025}
+}</code></pre>
+    </section>
+
+    <footer>
+      © 2025 Yijia Ma. Project page highlighting Bayesian statistics,
+      functional data analysis, stochastic-process modeling, and computational inference.
+    </footer>
+
+  </div>
+</body>
+</html>
