@@ -207,6 +207,145 @@
       text-align: center;
     }
 
+    /* Compact vertical methodological flow */
+    .framework-flow {
+      margin-top: 22px;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .framework-item {
+      position: relative;
+      display: grid;
+      grid-template-columns: 62px 1fr;
+      gap: 14px;
+      align-items: start;
+      background: linear-gradient(180deg, #ffffff, #faf8ff);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 18px 20px;
+      box-shadow: 0 6px 18px rgba(91, 63, 140, 0.075);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .framework-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(91, 63, 140, 0.13);
+    }
+
+    .framework-item + .framework-item {
+      margin-top: 30px;
+    }
+
+    .framework-item + .framework-item::before {
+      content: "↓";
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--accent);
+      font-size: 1.45rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .framework-number {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #8a6bc5);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    .framework-content h3 {
+      margin: 0 0 5px;
+      font-size: 1.02rem;
+      color: #111827;
+    }
+
+    .framework-content p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.91rem;
+      line-height: 1.55;
+    }
+
+    .framework-note {
+      max-width: 760px;
+      margin: 22px auto 0;
+      padding: 15px 18px;
+      border-radius: 13px;
+      background: linear-gradient(180deg, #f8f5ff, #ffffff);
+      border: 1px solid #e6ddff;
+      color: #45375f;
+      font-size: 0.92rem;
+    }
+
+    /* Application figure cards */
+    .application-figure-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 24px;
+    }
+
+    .application-figure-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(91, 63, 140, 0.08);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .application-figure-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 34px rgba(91, 63, 140, 0.14);
+    }
+
+    .application-figure-card img {
+      width: 100%;
+      height: 210px;
+      object-fit: contain;
+      background: #faf8ff;
+      border-bottom: 1px solid var(--border);
+      padding: 12px;
+    }
+
+    .application-figure-content {
+      padding: 18px 18px 20px;
+    }
+
+    .application-figure-content h3 {
+      margin: 0 0 8px;
+      font-size: 1.05rem;
+      color: #111827;
+    }
+
+    .application-figure-content p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.94rem;
+      line-height: 1.55;
+    }
+
+    .application-note {
+      margin-top: 24px;
+      padding: 18px 20px;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f8f5ff, #ffffff);
+      border: 1px solid #e6ddff;
+      color: #45375f;
+      font-size: 0.98rem;
+    }
+
     pre {
       background: #111827;
       color: #f9fafb;
@@ -230,6 +369,16 @@
       text-align: center;
     }
 
+    @media (max-width: 900px) {
+      .application-figure-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .application-figure-card img {
+        height: auto;
+      }
+    }
+
     @media (max-width: 760px) {
       h1 {
         font-size: 1.8rem;
@@ -242,6 +391,22 @@
 
       .container {
         padding: 24px 16px 50px;
+      }
+
+      .framework-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 17px 18px;
+      }
+
+      .framework-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+
+      .framework-content h3 {
+        font-size: 1rem;
       }
     }
   </style>
@@ -285,7 +450,7 @@
     </header>
 
     <div class="teaser">
-      <!-- Replace this image with a figure exported from the paper, such as Fig. 1, Fig. 3, or Fig. 6 -->
+      <!-- Suggested figure: Fig. 1, Fig. 3, or Fig. 6 from the paper -->
       <img src="assets/bayesian_registration_teaser.png" alt="Bayesian function registration framework" />
       <div class="caption">
         A Bayesian framework for function registration using CLR-based linear representation,
@@ -379,51 +544,86 @@
     <section id="method">
       <h2>Methodological Framework</h2>
 
-      <div class="grid">
-        <div class="card">
-          <h3>1. Functional Data</h3>
-          <p>
-            Observed functions contain both amplitude variation and phase variation.
-          </p>
+      <p>
+        The proposed Bayesian framework transforms time-warping functions into a linear
+        representation, places stochastic-process priors in that space, and uses posterior sampling
+        to quantify uncertainty in function alignment.
+      </p>
+
+      <div class="framework-flow">
+
+        <div class="framework-item">
+          <div class="framework-number">1</div>
+          <div class="framework-content">
+            <h3>Start with Functional Data</h3>
+            <p>
+              Observed functions contain both amplitude variation and phase variation, making
+              direct comparison difficult without alignment.
+            </p>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>2. Time Warping</h3>
-          <p>
-            Phase variability is represented by strictly increasing time-warping functions.
-          </p>
+        <div class="framework-item">
+          <div class="framework-number">2</div>
+          <div class="framework-content">
+            <h3>Represent Phase by Time Warping</h3>
+            <p>
+              Phase variability is represented by strictly increasing time-warping functions
+              that describe timing differences across curves.
+            </p>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>3. CLR Representation</h3>
-          <p>
-            Warping functions are transformed into a linear L²-based representation using
-            a centered log-ratio mapping.
-          </p>
+        <div class="framework-item">
+          <div class="framework-number">3</div>
+          <div class="framework-content">
+            <h3>Map Warpings to a Linear Space</h3>
+            <p>
+              A centered log-ratio representation transforms time-warping functions into a
+              linear L²-based space, avoiding nonlinear tangent-space approximation.
+            </p>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>4. Bayesian Prior</h3>
-          <p>
-            Gaussian or non-Gaussian stochastic-process priors are placed on the transformed
-            warping functions.
-          </p>
+        <div class="framework-item">
+          <div class="framework-number">4</div>
+          <div class="framework-content">
+            <h3>Place a Bayesian Prior</h3>
+            <p>
+              Gaussian or non-Gaussian stochastic-process priors are placed on the transformed
+              warping functions to encode prior information.
+            </p>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>5. Likelihood</h3>
-          <p>
-            The likelihood is based on the alignment discrepancy between SRVF-transformed functions.
-          </p>
+        <div class="framework-item">
+          <div class="framework-number">5</div>
+          <div class="framework-content">
+            <h3>Combine Prior with Likelihood</h3>
+            <p>
+              The likelihood measures alignment discrepancy between transformed functions,
+              while the prior controls plausible warping behavior.
+            </p>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>6. Posterior Sampling</h3>
-          <p>
-            MCMC algorithms generate posterior samples of warping functions, enabling uncertainty
-            quantification.
-          </p>
+        <div class="framework-item">
+          <div class="framework-number">6</div>
+          <div class="framework-content">
+            <h3>Sample the Posterior Warpings</h3>
+            <p>
+              MCMC algorithms generate posterior samples of warping functions, providing
+              uncertainty quantification rather than only one optimal alignment.
+            </p>
+          </div>
         </div>
+
+      </div>
+
+      <div class="framework-note">
+        <strong>Key idea:</strong> instead of estimating only a single optimal alignment, the method
+        treats time warping as a random function and uses Bayesian posterior sampling to describe
+        multiple plausible alignments and their uncertainty.
       </div>
     </section>
 
@@ -468,48 +668,87 @@
     <section id="applications">
       <h2>Applications in the Paper</h2>
 
-      <div class="grid">
-        <div class="card">
-          <h3>Pairwise Registration</h3>
-          <p>
-            The method aligns two functions while quantifying posterior uncertainty in the warping.
-          </p>
+      <p>
+        The paper demonstrates the Bayesian registration framework through simulations,
+        prior-sensitivity analyses, Gaussian and non-Gaussian priors, pairwise registration,
+        multiple-function registration, and real-data alignment. The figure cards below make
+        the applied role of the method easier to understand.
+      </p>
+
+      <div class="application-figure-grid">
+
+        <div class="application-figure-card">
+          <img src="assets/app_clr_vs_srvf.png" alt="CLR-based model versus SRVF-based model" />
+          <div class="application-figure-content">
+            <h3>CLR-Based Warping Model</h3>
+            <p>
+              The CLR-based representation resamples valid warping functions and avoids
+              inappropriate non-increasing warpings that can arise from tangent-space approximation.
+            </p>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>Multiple Registration</h3>
-          <p>
-            The framework extends to multiple functions and provides an efficient center-of-orbit step.
-          </p>
+        <div class="application-figure-card">
+          <img src="assets/app_pairwise_registration.png" alt="Pairwise Bayesian registration" />
+          <div class="application-figure-content">
+            <h3>Pairwise Bayesian Registration</h3>
+            <p>
+              Posterior samples of warping functions align two curves while quantifying
+              uncertainty around the registration result.
+            </p>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>Prior Sensitivity</h3>
-          <p>
-            The paper studies how likelihood scale, covariance, and prior mean influence alignment results.
-          </p>
+        <div class="application-figure-card">
+          <img src="assets/app_non_gaussian_prior.png" alt="Non-Gaussian process prior" />
+          <div class="application-figure-content">
+            <h3>Non-Gaussian Process Prior</h3>
+            <p>
+              Non-Gaussian priors can encode structured prior knowledge and exclude
+              undesirable alignment modes when needed.
+            </p>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>Multimodal Alignment</h3>
-          <p>
-            Posterior sampling can reveal multiple plausible alignment modes.
-          </p>
+        <div class="application-figure-card">
+          <img src="assets/app_sigma_effect.png" alt="Effect of sigma in Bayesian registration" />
+          <div class="application-figure-content">
+            <h3>Effect of Likelihood Scale</h3>
+            <p>
+              The likelihood scale controls the balance between data-driven alignment and
+              prior-driven warping behavior.
+            </p>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>Simulation Studies</h3>
-          <p>
-            Multiple simulations demonstrate the flexibility and advantages of the proposed Bayesian framework.
-          </p>
+        <div class="application-figure-card">
+          <img src="assets/app_covariance_effect.png" alt="Effect of covariance operator" />
+          <div class="application-figure-content">
+            <h3>Effect of Covariance Structure</h3>
+            <p>
+              Covariance design allows the prior to impose different degrees of flexibility
+              across the time domain.
+            </p>
+          </div>
         </div>
 
-        <div class="card">
-          <h3>Real Data Analysis</h3>
-          <p>
-            The method is applied to real functional data to demonstrate practical alignment performance.
-          </p>
+        <div class="application-figure-card">
+          <img src="assets/app_multiple_registration.png" alt="Multiple function registration and real data analysis" />
+          <div class="application-figure-content">
+            <h3>Multiple Registration and Real Data</h3>
+            <p>
+              The framework extends from pairwise alignment to multiple-function registration
+              and is demonstrated on real functional data.
+            </p>
+          </div>
         </div>
+
+      </div>
+
+      <div class="application-note">
+        <strong>Why this matters:</strong> the framework does more than estimate one alignment.
+        It gives a posterior distribution over possible warpings, supports flexible prior modeling,
+        and provides uncertainty-aware registration for functional data.
       </div>
     </section>
 
@@ -653,3 +892,4 @@
   </div>
 </body>
 </html>
+
